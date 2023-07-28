@@ -17,11 +17,13 @@ namespace QFramework
             T res = Resources.Load<T>(name);
             return res is GameObject ? GameObject.Instantiate(res) : res;
         }
+
         /// <summary>
         /// 异步加载资源
         /// </summary>
         public static void AsyncLoad<T>(string name, Action<T> callback) where T : UnityEngine.Object =>
-            PublicMono.Instance.StartCoroutine(AsyncLoadRes(name, callback));
+            MonoManager.GetInstance().StartCoroutine(AsyncLoadRes(name, callback));
+
         /// <summary>
         /// 异步加载协程函数
         /// </summary>
@@ -31,6 +33,7 @@ namespace QFramework
             while (!r.isDone) yield return null;
             callback(r.asset is GameObject ? GameObject.Instantiate(r.asset) as T : r.asset as T);
         }
+
         /// <summary>
         /// 同步加载资源集合
         /// </summary>

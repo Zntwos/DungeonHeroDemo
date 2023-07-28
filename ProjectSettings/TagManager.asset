@@ -8,6 +8,7 @@ TagManager:
   - Wall
   - Reward
   - Door
+  - Weapon
   layers:
   - Default
   - TransparentFX

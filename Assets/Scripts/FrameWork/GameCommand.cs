@@ -26,5 +26,28 @@ namespace DungeonHero
             this.SendEvent<GoldScoreAddEvent>();
         }
     }
-
+    /// <summary>
+    /// 得到武器事件
+    /// </summary>
+    public class GetWeaponCommand : AbstractCommand
+    {
+        protected override void OnExecute()
+        {
+            this.SendEvent<GetWeaponEvent>();
+        }
+    }
+    public class loseWeaponCommand : AbstractCommand
+    {
+        protected override void OnExecute()
+        {
+            this.SendEvent<LoseWeaponEvent>();
+        }
+    }
+    public class WeaponFire : AbstractCommand
+    {
+        protected override void OnExecute()
+        {
+            this.SendEvent<WeaponFireEvent>();
+        }
+    }
 }

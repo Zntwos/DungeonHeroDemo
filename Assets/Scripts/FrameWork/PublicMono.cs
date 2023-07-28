@@ -4,16 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace QFramework
 {
-    public class PublicMono : MonoBehaviour
+    public class PublicMono : BaseManager<PublicMono>
     {
-        public static PublicMono Instance;
-
-        private void Awake()
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
         public event Action OnUpdate;
         public event Action OnFixUpdate;
         public event Action OnLateUpdate;

@@ -11,7 +11,7 @@ namespace DungeonHero
         GameObject GetEquipment(string name);
         void GetEquipment(string name, Action<GameObject> callBack = null);
         void HandheldEquipment(int index);
-        void DisposeEquip(int index);   
+        void DisposeEquip(int index);  
     }
     public class EquipSystem : AbstractSystem, IEquipSystem
     {
