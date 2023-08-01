@@ -15,13 +15,15 @@ namespace DungeonHero
     }
     public interface IWeaponModal : IModel
     {
-        BindableProperty<GameObject> weaponHeld { get; set; }
+        BindableProperty<List<GameObject>> weaponInventory { get; set; }
     }
     public class Modal : AbstractModel , INumModal, ISpriteModal, IWeaponModal
     {
         BindableProperty<int> INumModal.GoldScore { get; set; } = new BindableProperty<int>(0);
         BindableProperty<Sprite> ISpriteModal.weaponIcon { get; set; } = new BindableProperty<Sprite>(null);
-        BindableProperty<GameObject> IWeaponModal.weaponHeld { get; set; } = new BindableProperty<GameObject>(null);
+        BindableProperty<List<GameObject>> IWeaponModal.weaponInventory { get; set; } = new BindableProperty<List<GameObject>>(new List<GameObject>(3) { null, null, null });
+
+
         protected override void OnInit() 
         {
             

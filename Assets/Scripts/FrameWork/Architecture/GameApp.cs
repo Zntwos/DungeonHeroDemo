@@ -13,8 +13,8 @@ namespace DungeonHero
             this.RegisterModel<INumModal>(new Modal());
             this.RegisterModel<ISpriteModal>(new Modal());
             this.RegisterModel<IWeaponModal>(new Modal());
-
             this.RegisterSystem<IObjectPoolSystem>(new ObjectPoolSystem());
+            this.RegisterSystem<IWeaponInventorySystem>(new WeaponInventorySystem());
         }
     }
 }

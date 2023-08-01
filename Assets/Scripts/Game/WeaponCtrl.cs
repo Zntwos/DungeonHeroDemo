@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 
 namespace DungeonHero
 {
-    public class WeaponCtrl : MonoBehaviour, IController
+    public class WeaponCtrl : MonoBehaviour, IController, IWeapon
     {
         public Weapon weapon;
         private bool _isActive;
@@ -34,32 +34,31 @@ namespace DungeonHero
             _collider2D = GetComponent<Collider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _objectPool = this.GetSystem<IObjectPoolSystem>();
+
             _trans1 = transform.position;
-            //该武器被获取时
-            this.RegisterEvent<GetWeaponEvent>(e =>
-            {
-                //上传图标到数据模型
-                if(this.GetModel<IWeaponModal>().weaponHeld.Value == gameObject)
-                {
-                    this.GetModel<ISpriteModal>().weaponIcon.Value = weapon.icon;
-                    _isActive = true;
-                }
+            ////该武器被获取时
+            //this.RegisterEvent<GetWeaponEvent>(e =>
+            //{
+            //    //上传图标到数据模型
+            //    if(this.GetModel<IWeaponModal>().weaponHeld.Value == gameObject)
+            //    {
+            //        this.GetModel<ISpriteModal>().weaponIcon.Value = weapon.icon;
+            //        _isActive = true;
+            //    }
                     
-            }).UnRegisterWhenGameObjectDestroyed(gameObject);
-            //该武器被丢弃时
-            this.RegisterEvent<LoseWeaponEvent>(e =>
-            {
-                if(this.GetModel<IWeaponModal>().weaponHeld.Value == gameObject)
-                {
-                    //从数据模型中删除图标
-                    this.GetModel<ISpriteModal>().weaponIcon.Value = null;
-                    //var pos = transform.parent.transform.position;
-                    //transform.position = pos;
-                    _isActive = false;
-                }
-                
-                    
-            }).UnRegisterWhenGameObjectDestroyed(gameObject);
+            //}).UnRegisterWhenGameObjectDestroyed(gameObject);
+            ////该武器被丢弃时
+            //this.RegisterEvent<LoseWeaponEvent>(e =>
+            //{
+            //    if(this.GetModel<IWeaponModal>().weaponHeld.Value == gameObject)
+            //    {
+            //        //从数据模型中删除图标
+            //        this.GetModel<ISpriteModal>().weaponIcon.Value = null;
+            //        //var pos = transform.parent.transform.position;
+            //        //transform.position = pos;
+            //        _isActive = false;
+            //    }
+            //}).UnRegisterWhenGameObjectDestroyed(gameObject);
         }
 
         // Update is called once per frame
@@ -136,6 +135,25 @@ namespace DungeonHero
         public IArchitecture GetArchitecture()
         {
             return GameApp.Interface;
+        }
+        /// <summary>
+        /// 武器被捡起
+        /// </summary>
+        /// <param name="Receiver">接收者</param>
+        public void PickedUp(GameObject Receiver)
+        {
+            //Debug.Log(Receiver.name);
+            this.transform.parent = Receiver.transform.Find("WeaponSlot");
+            this.transform.position = Receiver.transform.Find("WeaponSlot").position;
+            _isActive = true;
+        }
+        /// <summary>
+        /// 武器被丢弃
+        /// </summary>
+        public void disposed()
+        {
+            transform.parent = null;
+            _isActive = false;
         }
     }
 }

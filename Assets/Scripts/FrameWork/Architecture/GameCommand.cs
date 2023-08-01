@@ -43,6 +43,20 @@ namespace DungeonHero
             this.SendEvent<LoseWeaponEvent>();
         }
     }
+    public class WeaponSwitchCommand : AbstractCommand
+    {
+        protected override void OnExecute()
+        {
+            this.SendEvent<WeaponSwitchevent>();
+        }
+    }
+    public class WeaponInventoryChangeCommand : AbstractCommand
+    {
+        protected override void OnExecute()
+        {
+            this.SendEvent<WeaponInventoryChangeEvent>();
+        }
+    }
     public class WeaponFire : AbstractCommand
     {
         protected override void OnExecute()
