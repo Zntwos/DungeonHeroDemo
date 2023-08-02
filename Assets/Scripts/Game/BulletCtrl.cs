@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using QFramework;
+using Unity.VisualScripting;
 
 namespace DungeonHero
 {
@@ -29,13 +30,14 @@ namespace DungeonHero
         {
             transform.Translate(speed * Time.deltaTime, 0, 0);
         }
-        private void OnTriggerEnter(Collider other)
+
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (other.tag == "Wall")
+            if(collision.TryGetComponent<IGetHit>(out IGetHit hit))
             {
-                Debug.Log("Åö×²µ½Ç½±Ú");
+                hit.GetHit(2f);
+                Debug.Log("»÷ÖÐ£º");
             }
-            Destroy(gameObject);
         }
         
         IEnumerator BulletRecovery()

@@ -14,6 +14,7 @@ namespace QFramework
         void CurrentWeaponSwitching(float axis);
         void AutoWeaponSwitching();
         void DisposeInventory();
+        int Count();
     }
     public class WeaponInventorySystem : AbstractSystem, IWeaponInventorySystem
     {
@@ -26,8 +27,14 @@ namespace QFramework
             get { return _currentWeaponIndex; }
             set 
             {
-                if (value < 0 || value > 2) value = 0;
-                _currentWeaponIndex = value;
+                if (_currentWeaponIndex != value)
+                {
+                    _currentWeaponIndex = value;
+                    this.SendEvent<WeaponSwitchEvent>();
+                }
+
+                //if (value < 0 || value > _weaponNum - 1) value = 0;
+                
             }
         }
         private List<GameObject> _weaponInventory;
@@ -50,8 +57,8 @@ namespace QFramework
             {
                 if (this.GetModel<IWeaponModal>().weaponInventory.Value[i] != weaponInventory[i])
                 {
-                    this.SendEvent<WeaponInventoryChangeEvent>();
                     this.GetModel<IWeaponModal>().weaponInventory.Value[i] = weaponInventory[i];
+                    this.SendEvent<WeaponSwitchEvent>();
                 }
             }
         }
@@ -149,7 +156,6 @@ namespace QFramework
                 return;
             }
             RemoveWeapon(currentWeaponIndex);
-            //Debug.Log(weaponInventory);
         }
 
         public void RemoveWeapon(int index)
@@ -165,6 +171,16 @@ namespace QFramework
         {
             currentWeaponIndex = 0;
             weaponInventory.Clear();
+        }
+
+        public int Count()
+        {
+            int count = 0;
+            for(int i = 0; i < _weaponNum; i++)
+            {
+                if (weaponInventory[i] != null) count++;
+            }
+            return count;
         }
     }
 

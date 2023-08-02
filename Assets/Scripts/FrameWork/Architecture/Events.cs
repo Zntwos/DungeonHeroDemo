@@ -9,6 +9,6 @@ namespace DungeonHero
     public struct WeaponFireEvent { } 
     public struct GetWeaponEvent { }
     public struct LoseWeaponEvent {}
-    public struct WeaponSwitchevent {}
+    public struct WeaponSwitchEvent {}
     public struct WeaponInventoryChangeEvent { }
 }

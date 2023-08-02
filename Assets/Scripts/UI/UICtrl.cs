@@ -12,16 +12,8 @@ namespace DungeonHero
         public Image weaponSlot;
         private Text _goldNum;
         private IWeaponInventorySystem _weaponInventorySystem;
-        private IWeapon _iWeapon;
-        [SerializeField]
-        private List<Sprite> _weaponIcons = new List<Sprite>(3) { null, null, null };
-        [SerializeField]
-        private List<Sprite> _availableWeaponIcon = new List<Sprite>();
-        [SerializeField]
-        int index = 0;
         private void Start()
         {
-            _iWeapon=GetComponent<IWeapon>();
             _weaponInventorySystem = this.GetSystem<IWeaponInventorySystem>();
             _goldNum = transform.Find("GoldScores").GetComponent<Text>();
             
@@ -29,34 +21,31 @@ namespace DungeonHero
             {
                 _goldNum.text = GoldScore.ToString();
             }).UnRegisterWhenGameObjectDestroyed(gameObject);
-            
-            //this.GetModel<ISpriteModal>().weaponIcon.RegisterWithInitValue(weaponIcon =>
-            //{
-            //    weaponSlot.sprite = weaponIcon;
-            //}).UnRegisterWhenGameObjectDestroyed(gameObject);
 
-            //this.RegisterEvent<WeaponInventoryChangeEvent>(e=> { GetAvailableWeaponIcon(); }).UnRegisterWhenGameObjectDestroyed(gameObject);
+            this.RegisterEvent<WeaponSwitchEvent>(e =>
+            {
+                var w = _weaponInventorySystem.weaponInventory[_weaponInventorySystem.currentWeaponIndex];
+                if (w == null)
+                {
+                    weaponSlot.sprite = null;
+                    return;
+                }
+                else
+                {
+                    var sp = w.GetComponent<WeaponCtrl>().weapon.icon;
+                    weaponSlot.sprite = sp != null ? sp : null;
+                }
+            });
         }
         private void Update()
         {
-            ////weaponSlot.sprite = _availableWeaponIcon[_weaponInventorySystem.currentWeaponIndex];
-            //if(index != _weaponInventorySystem.currentWeaponIndex)
-            //{
-            //    index = _weaponInventorySystem.currentWeaponIndex;
-            //    weaponSlot.sprite = _weaponIcons[_weaponInventorySystem.currentWeaponIndex];
-            //}
+            if (weaponSlot.sprite != null)
+            {
+                weaponSlot.color = new Color(225, 225, 225, 225);
+                return;
+            }
+            weaponSlot.color = new Color(225, 225, 225, 0);
         }
-        //private void GetAvailableWeaponIcon()
-        //{
-        //    Debug.Log("ÎäÆ÷Í¼±ê¸üÐÂ");
-        //    _weaponIcons.Clear();
-        //    var weapons = this.GetModel<IWeaponModal>().weaponInventory.Value;
-        //    for (int i = 0; i < weapons.Count; i++)
-        //    {
-        //        if (weapons[i] == null) continue;
-        //        _weaponIcons[i] = 
-        //    }
-        //}
         public IArchitecture GetArchitecture()
         {
             return GameApp.Interface;

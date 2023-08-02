@@ -11,45 +11,44 @@ namespace DungeonHero
     public class WeaponInventoryCtrl : MonoBehaviour, IController
     {
         private IWeaponInventorySystem _weaponInventorySystem;
+        private ITimerSystem _timerSystem;
 
-        private IWeapon _iWeapon;
-        [SerializeField]
-        private int currentWeapon;
-        [SerializeField]
-        private List<GameObject> Weapons = new List<GameObject>(3) { null, null, null };
+        public int currentWeapon;
+
+        private bool _canPick = true;
 
         private void Start()
         {
             _weaponInventorySystem = this.GetSystem<IWeaponInventorySystem>();
-
+            _timerSystem = this.GetSystem<ITimerSystem>();
         }
 
         private void Update()
         {
             _weaponInventorySystem.CurrentWeaponSwitching(Input.GetAxis("Mouse ScrollWheel"));
             currentWeapon = _weaponInventorySystem.currentWeaponIndex;
-            Weapons = _weaponInventorySystem.weaponInventory;
-            //Debug.Log("µ±Ç°ÎäÆ÷Ë÷Òý:" + currentWeapon);
-
-            //if (Input.GetKeyDown(KeyCode.Space))
             _weaponInventorySystem.AutoWeaponSwitching();
 
             if (!Input.GetKeyDown(KeyCode.Q) || _weaponInventorySystem.weaponInventory[currentWeapon] == null) return;
             _weaponInventorySystem.RemoveWeapon(currentWeapon);
         }
-        
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.TryGetComponent(out IDrops drop))
+            if (!Input.GetKey(KeyCode.F) || !_canPick || !(_weaponInventorySystem.Count() < 3)) return;
+            if (collision.TryGetComponent(out IWeapon drop))
             {
-                if (!Input.GetKeyDown(KeyCode.F)) return;
                 _weaponInventorySystem.AddWeapon(collision.gameObject);
-                //Debug.Log(collision.gameObject);
                 drop.PickedUp(gameObject);
+                _canPick = false;
+                _timerSystem.AddTimer(PickEventCooldown, 0.2f, false);
             }
         }
 
+        private void PickEventCooldown()
+        {
+            _canPick = true;
+        }
 
         IArchitecture IBelongToArchitecture.GetArchitecture()
         {

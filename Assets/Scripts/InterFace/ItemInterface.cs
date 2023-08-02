@@ -1,15 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using QFramework;
 
-namespace DungeonHero
+namespace QFramework
 {
-    /// <summary>
-    /// ½Ó¿Ú£ºµôÂäÎï
-    /// </summary>
     public interface IDrops
     {
         void PickedUp(GameObject Receiver);
     }
+    public interface IWeapon : IDrops
+    {
+        void disposed();
+    }
+    public interface IReward : IDrops
+    {
+
+    }
 }
+

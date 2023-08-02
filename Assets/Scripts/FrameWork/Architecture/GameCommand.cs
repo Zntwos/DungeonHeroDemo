@@ -47,14 +47,7 @@ namespace DungeonHero
     {
         protected override void OnExecute()
         {
-            this.SendEvent<WeaponSwitchevent>();
-        }
-    }
-    public class WeaponInventoryChangeCommand : AbstractCommand
-    {
-        protected override void OnExecute()
-        {
-            this.SendEvent<WeaponInventoryChangeEvent>();
+            this.SendEvent<WeaponSwitchEvent>();
         }
     }
     public class WeaponFire : AbstractCommand
